@@ -1,0 +1,14 @@
+ca.key
+ca.crt
+ca.der
+serial
+index.txt
+certs
+*.key
+*.crt
+*.der
+*.csr
+*.p12
+*.pkcs12
+*.jks
+
