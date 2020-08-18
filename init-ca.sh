@@ -13,7 +13,7 @@ touch index.txt
 echo "  generating CA keys"
 openssl req -nodes -x509         \
         -config openssl.conf     \
-        -newkey rsa -days 3650   \
+        -newkey rsa -days 365    \
         -out ca.crt -outform PEM \
         -subj "/CN=${DEFAULT_CA_NAME}/"
 openssl x509 -in ca.crt -out ca.der -outform DER
