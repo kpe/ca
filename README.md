@@ -41,4 +41,10 @@ All password protected key stores would use the password specified in `gencert.s
 
 
     
-    
+## Renewing the root CA
+To renew the root CA, [try](https://www.golinuxcloud.com/renew-expired-root-ca-certificate-openssl/):
+```bash
+openssl x509 -x509toreq -in ca.crt -signkey ca.key -out new-ca.csr
+openssl x509 -req -days 365 -in new-ca.csr -signkey ca.key -out ca-new.crt
+```
+
