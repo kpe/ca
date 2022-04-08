@@ -43,17 +43,19 @@ function gencert() {
     if [ $DEFAULT_CERT = "client" ]; then
         echo "Generating CLIENT Certificate for $name"
         openssl req -nodes -new -key ${name}.key -out ${name}.csr -outform PEM  \
-                -subj "${SUBJ_PREF}/CN=${name}" -config openssl.conf
-	      openssl ca -in ${name}.csr -out ${name}.crt  -batch                     \
-                -extensions client_ca_extensions -config openssl.conf
+              -subj "${SUBJ_PREF}/CN=${name}" -config openssl.conf
+	      openssl ca -in ${name}.csr -out ${name}.crt  -batch                   \
+              -extensions client_ca_extensions                                  \
+              -extensions certificate_extensions -config openssl.conf
     else
         echo "Generating SERVER Certificate for $name with subjectAltName: $altName"
         openssl req -nodes -new -key ${name}.key -out ${name}.csr -outform PEM   \
                 -subj "${SUBJ_PREF}/CN=${name}" -reqexts SAN                     \
                 -config <(cat openssl.conf <(printf "[SAN]\nsubjectAltName=${altName}\n")) 
-	      openssl ca -in ${name}.csr -out ${name}.crt -batch                       \
-                -extensions server_ca_extensions -extensions SAN                 \
-                -config <(cat openssl.conf <(printf "[SAN]\nsubjectAltName=${altName}\n"))
+	      openssl ca -in ${name}.csr -out ${name}.crt -batch                     \
+              -extensions server_ca_extensions -extensions SAN                   \
+              -extensions certificate_extensions                                 \
+              -config <(cat openssl.conf <(printf "[SAN]\nsubjectAltName=${altName}\n"))
     fi
     # convert to PKCS12 - with and without password
     openssl pkcs12 -export -out ${name}.nopass.p12 -in ${name}.crt -inkey ${name}.key \
